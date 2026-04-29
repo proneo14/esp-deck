@@ -7,4 +7,5 @@
 __pycache__
 *.pyc
 src/gif_resized.gif
+src/secrets.h
 .env

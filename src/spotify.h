@@ -111,6 +111,36 @@ public:
     return (code == 200 || code == 204);
   }
 
+  bool skipNext() {
+    if (millis() > tokenExpiresAt) {
+      if (!refreshAccessToken()) return false;
+    }
+    WiFiClientSecure client;
+    client.setInsecure();
+    HTTPClient http;
+    http.begin(client, "https://api.spotify.com/v1/me/player/next");
+    http.addHeader("Authorization", "Bearer " + accessToken);
+    http.addHeader("Content-Length", "0");
+    int code = http.POST("");
+    http.end();
+    return (code == 200 || code == 204);
+  }
+
+  bool skipPrev() {
+    if (millis() > tokenExpiresAt) {
+      if (!refreshAccessToken()) return false;
+    }
+    WiFiClientSecure client;
+    client.setInsecure();
+    HTTPClient http;
+    http.begin(client, "https://api.spotify.com/v1/me/player/previous");
+    http.addHeader("Authorization", "Bearer " + accessToken);
+    http.addHeader("Content-Length", "0");
+    int code = http.POST("");
+    http.end();
+    return (code == 200 || code == 204);
+  }
+
 private:
   String accessToken;
   unsigned long tokenExpiresAt = 0;
